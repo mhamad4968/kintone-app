@@ -5,17 +5,17 @@ on:
 
 jobs:
   claude:
-    # @claude へのメンションがあった場合のみ実行
     if: contains(github.event.comment.body, '@claude')
     runs-on: ubuntu-latest
     permissions:
       contents: write
       pull-requests: write
       issues: write
+      # これが不足していたためエラーが出ていました
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - name: Run Claude Code
-        # 正しいリポジトリ名は anthropics/claude-code-action です
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
