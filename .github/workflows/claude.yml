@@ -5,6 +5,7 @@ on:
 
 jobs:
   claude:
+    # @claude へのメンションがあった場合のみ実行
     if: contains(github.event.comment.body, '@claude')
     runs-on: ubuntu-latest
     permissions:
@@ -13,10 +14,8 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@v4
-      - name: Install Claude Code
-        run: npm install -g @anthropic-ai/claude-code
       - name: Run Claude Code
-        run: claude --init "Issue: ${{ github.event.issue.title }}\nContent: ${{ github.event.comment.body }}\n修正してプルリクエストを作成してください。"
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # 正しいリポジトリ名は anthropics/claude-code-action です
+        uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
